@@ -1,37 +1,40 @@
-import moment from "moment";
+import moment from 'moment';
 
 export function add(date, quantity, unit) {
-  return moment(date)
+  return moment
+    .utc(date)
     .add(quantity, unit)
     .toDate();
 }
 
 export function formatDate(date, format, locale = null) {
   if (locale) {
-    return withLocale(locale, () => moment(date).format(format));
+    return withLocale(locale, () => moment.utc(date).format(format));
   } else {
-    return moment(date).format(format);
+    return moment.utc(date).format(format);
   }
 }
 
 export function startOf(date, unit) {
-  return moment(date)
+  return moment
+    .utc(date)
     .startOf(unit)
     .toDate();
 }
 
 export function endOf(date, unit) {
-  return moment(date)
+  return moment
+    .utc(date)
     .endOf(unit)
     .toDate();
 }
 
 export function weekday(date) {
-  return moment(date).weekday();
+  return moment.utc(date).weekday();
 }
 
 export function isoWeekday(date) {
-  return moment(date).isoWeekday();
+  return moment.utc(date).isoWeekday();
 }
 
 export function getWeekdaysShort() {
@@ -47,23 +50,23 @@ export function getWeekdays() {
 }
 
 export function isAfter(date1, date2) {
-  return moment(date1).isAfter(date2);
+  return moment.utc(date1).isAfter(date2);
 }
 
 export function isBefore(date1, date2) {
-  return moment(date1).isBefore(date2);
+  return moment.utc(date1).isBefore(date2);
 }
 
 export function isSame(date1, date2, unit) {
-  return moment(date1).isSame(date2, unit);
+  return moment.utc(date1).isSame(date2, unit);
 }
 
 export function isBetween(date, start, end, unit, inclusivity) {
-  return moment(date).isBetween(start, end, unit, inclusivity);
+  return moment.utc(date).isBetween(start, end, unit, inclusivity);
 }
 
 export function diff(date1, date2) {
-  return moment(date1).diff(date2);
+  return moment.utc(date1).diff(date2);
 }
 
 export function normalizeDate(dateOrMoment) {
@@ -83,8 +86,8 @@ export function normalizeRangeActionValue(val) {
   return {
     date: val.date,
     moment: {
-      start: val.date.start ? moment(val.date.start) : val.date.start,
-      end: val.date.end ? moment(val.date.end) : val.date.end
+      start: val.date.start ? moment.utc(val.date.start) : val.date.start,
+      end: val.date.end ? moment.utc(val.date.end) : val.date.end
     }
   };
 }
@@ -92,12 +95,12 @@ export function normalizeRangeActionValue(val) {
 export function normalizeMultipleActionValue(val) {
   return {
     date: val.date,
-    moment: val.date ? val.date.map(e => moment(e)) : val.date
+    moment: val.date ? val.date.map(e => moment.utc(e)) : val.date
   };
 }
 
 export function normalizeCalendarDay(day) {
-  day.moment = moment(day.date);
+  day.moment = moment.utc(day.date);
   return day;
 }
 
@@ -116,7 +119,10 @@ export function withLocale(locale, fn) {
 
 export function normalizeCalendarValue(value) {
   if (value) {
-    return { date: value.date, moment: value.date ? moment(value.date) : undefined }
+    return {
+      date: value.date,
+      moment: value.date ? moment.utc(value.date) : undefined
+    };
   }
   return { date: undefined, moment: undefined };
 }
@@ -128,12 +134,12 @@ export function normalizeDuration(value) {
   if (moment.isDuration(value)) {
     return value.asMilliseconds();
   }
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return value;
   }
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     let [, quantity, units] = value.match(/(\d+)(.*)/);
-    units = units.trim() || "days";
+    units = units.trim() || 'days';
     return moment.duration(parseInt(quantity, 10), units).asMilliseconds();
   }
 }
@@ -151,7 +157,7 @@ export function localeStartOfWeek(locale) {
 
 export function startOfWeek(day, startOfWeek) {
   while (isoWeekday(day) % 7 !== startOfWeek) {
-    day = add(day, -1, "day");
+    day = add(day, -1, 'day');
   }
   return day;
 }
@@ -159,7 +165,7 @@ export function startOfWeek(day, startOfWeek) {
 export function endOfWeek(day, startOfWeek) {
   let eow = (startOfWeek + 6) % 7;
   while (isoWeekday(day) % 7 !== eow) {
-    day = add(day, 1, "day");
+    day = add(day, 1, 'day');
   }
   return day;
 }
